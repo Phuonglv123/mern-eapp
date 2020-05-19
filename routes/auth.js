@@ -1,12 +1,55 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const config = require('../config/config');
+const jwt = require('jsonwebtoken');
 const validateUser = require('../validator/index');
 
 const User = require('../models/user');
 
 router.post('/login', async (req, res) => {
-
+    const {email, password} = req.body;
+    User.findOne({email: email})
+        .then(user => {
+            if (!user) {
+                return res.status(404).json({errors: "email or password is wrong "})
+            } else {
+                bcrypt.compare(password, user.password)
+                    .then(isMatch => {
+                        if (isMatch) {
+                            const payload = {
+                                id: user._id,
+                                email: user.email,
+                                role: user.role,
+                                isActive: user.isActive,
+                            };
+                            jwt.sign(
+                                payload,
+                                config.secretKey,
+                                {expiresIn: 3600},
+                                (err, token) => {
+                                    res.status(200).json({
+                                        payload,
+                                        success: true,
+                                        token: 'Bearer ' + token
+                                    })
+                                }
+                            )
+                        } else {
+                            return res.status(404).json({
+                                'errors': {
+                                    code: 400,
+                                    message: null,
+                                    detail: {
+                                        globalErrors:
+                                            "Unable to log in with provided credentials."
+                                    }
+                                }
+                            })
+                        }
+                    })
+            }
+        })
 });
 
 router.post('/register', async (req, res) => {
