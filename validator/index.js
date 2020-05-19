@@ -1,22 +1,36 @@
-exports.userSignupValidator = (req, res, next) => {
-    req.check('name', 'Name is required').notEmpty();
-    req.check('email', 'Email must be between 3 to 32 characters')
-        .matches(/.+\@.+\..+/)
-        .withMessage('Email must contain @')
-        .isLength({
-            min: 4,
-            max: 32
-        });
-    req.check('password', 'Password is required').notEmpty();
-    req.check('password')
-        .isLength({min: 6})
-        .withMessage('Password must contain at least 6 characters')
-        .matches(/\d/)
-        .withMessage('Password must contain a number');
-    const errors = req.validationErrors();
-    if (errors) {
-        const firstError = errors.map(error => error.msg)[0];
-        return res.status(400).json({error: firstError});
+const validator = require('validator');
+const isEmpty = require('./is_empty');
+
+module.exports = function validateUser(data) {
+    let errors = {};
+
+    data.email = !isEmpty(data.email) ? data.email : "";
+    data.password = !isEmpty(data.password) ? data.password : "";
+    data.fullName = !isEmpty(data.email) ? data.email : "";
+
+    if (validator.isEmpty(data.email)) {
+        errors.email = 'Email is valid'
     }
-    next();
+    if (validator.isEmpty(data.password)) {
+        errors.password = 'Password is valid';
+
+    }
+    if (!validator.isLength(data.password, {min: 6})) {
+        errors.password = 'Enter fill up 6 words';
+    }
+    if (validator.isEmpty(data.password2)) {
+        errors.password2 = 'password2 is valid';
+    }
+    if (!validator.equals(data.password, data.password2)) {
+        errors.password2 = 'password2 is match';
+    }
+    if (validator.isEmpty(data.fullName)) {
+        errors.fullName = 'fullName is valid';
+
+    }
+    return {
+        errors,
+        isValid: isEmpty(errors)
+    }
+
 };

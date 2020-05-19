@@ -1,57 +1,42 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const {userSignupValidator} = require('../validator');
-
-const config = require('../config/keys');
+const bcrypt = require('bcryptjs');
+const validateUser = require('../validator/index');
 
 const User = require('../models/user');
 
 router.post('/login', async (req, res) => {
-    const {email, password} = req.body;
-    User.findOne({email}, (err, user) => {
-        if (err || !user) {
-            return res.status(400).json({
-                error: 'User with that email does not exist. Please signup'
-            });
-        }
-        // if user is found make sure the email and password match
-        // create authenticate method in user model
-        if (!user.authenticate(password)) {
-            return res.status(401).json({
-                error: 'Email and password dont match'
-            });
-        }
-        // generate a signed token with user id and secret
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
-        // persist the token as 't' in cookie with expiry date
-        res.cookie('t', token, {expire: new Date() + 9999});
-        // return response with user and token to frontend client
-        const {_id, name, email, role} = user;
-        return res.json({token, user: {_id, email, name, role}});
-    });
+
 });
 
-router.post('/register', userSignupValidator, async (req, res) => {
-    const {name, email, password, about,} = req.body;
-    User.findOne({email: req.body.email})
+router.post('/register', async (req, res) => {
+    const {errors, isValid} = validateUser(req.body);
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
+    const {email, password, name, about, role} = req.body;
+    User.findOne({email: email})
         .then(user => {
             if (user) {
-                return res.json({msg: 'email does exits'})
+                res.json({msg: "email is does exits"});
             } else {
-                const NewUser = new User({
-                    name, email, password, about, salt: undefined, hashed_password: undefined
+                const newUser = new User({
+                    email, password, name, role, about
                 });
-                NewUser.save()
-                    .then(data => {
-                        return res.json({data})
+                bcrypt.genSalt(10, (err, salt) => {
+                    if (err) return console.log(err);
+                    bcrypt.hash(newUser.password, salt, (err, hash) => {
+                        if (err) return console.log(err);
+                        newUser.password = hash;
+                        newUser.save()
+                            .then(data => {
+                                res.status(200).json({data});
+                            })
                     })
-
+                })
             }
         })
-        .catch(e => {
-            console.log(e)
-        })
+        .catch(err => console.log(err));
 });
 
 module.exports = router;
