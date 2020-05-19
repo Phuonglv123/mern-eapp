@@ -41,9 +41,28 @@ let upload = multer(
 );
 
 router.get('/list-category', (req, res) => {
+    Product.find().exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
 });
 
-router.get('/detail/:categoryId', (req, res) => {
+router.get('/detail/:productId', (req, res) => {
+    Product.find({_id: req.params.productId})
+        .then(product => {
+            if (!product) {
+                return res.status(404).json({error: 'Product information not found'});
+            } else {
+                res.status(200).json(product);
+            }
+        })
+        .catch(e => {
+            return res.status(404).json({error: errorHandler(e)});
+        })
 });
 
 router.post('/create', passport.authenticate('jwt', {session: false}), authorizing('admin'), upload.array('photo'), (req, res) => {
@@ -91,7 +110,16 @@ router.post('/update/:productId', passport.authenticate('jwt', {session: false})
 });
 
 router.delete('/delete/:productId', passport.authenticate('jwt', {session: false}), authorizing('admin'), (req, res) => {
-
+    Product.remove((err, deletedProduct) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json({
+            message: 'Product deleted successfully'
+        });
+    });
 });
 
 
