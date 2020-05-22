@@ -5,7 +5,7 @@ import Auth from "../../services/api/Auth";
 
 export const PrivateRoute = ({component: Component, props, ...rest}) => (
     <Route {...rest} render={p => (
-        Auth.isAuthenticated() && Auth.isAuthenticated().role === 'admin'
+        Auth.isAuthenticated() && Auth.isAuthenticated().payload.role === 'admin'
             ? <Component {...p} {...props}/>
             : <Redirect to={{pathname: AppURL.login(), state: {from: p.location}}}/>
     )}/>

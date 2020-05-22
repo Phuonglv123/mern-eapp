@@ -35,21 +35,41 @@ class LayoutAdmin extends Component {
                                 Dashboard
                             </Link>
                         </Menu.Item>
+                        <SubMenu key="sub1" icon={<PieChartOutlined />} title="Category">
+                            <Menu.Item key={AppURL.category()} icon={<PieChartOutlined/>}>
+                                <Link to={AppURL.category()}>
+                                    List Category
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key={AppURL.createOrUpdateCategory('create')} icon={<PieChartOutlined/>}>
+                                <Link to={AppURL.createOrUpdateCategory('create')}>
+                                    Create Category
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key={AppURL.createOrUpdateCategory('update')} icon={<PieChartOutlined/>}>
+                                <Link to={AppURL.createOrUpdateCategory('update')}>
+                                    Update Category
+                                </Link>
+                            </Menu.Item>
+                        </SubMenu>
 
-
-                        <Menu.Item key={AppURL.category()} icon={<PieChartOutlined/>}>
-                            <Link to={AppURL.category()}>
-                                Category
-                            </Link>
-                        </Menu.Item>
-
-
-                        <Menu.Item key={AppURL.product()} icon={<PieChartOutlined/>}>
-                            <Link to={AppURL.product()}>
-                                Product
-                            </Link>
-                        </Menu.Item>
-
+                        <SubMenu key="sub2" icon={<PieChartOutlined />} title="Category">
+                            <Menu.Item key={AppURL.product()} icon={<PieChartOutlined/>}>
+                                <Link to={AppURL.product()}>
+                                    List Product
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key={AppURL.createOrUpdateProduct('create')} icon={<PieChartOutlined/>}>
+                                <Link to={AppURL.createOrUpdateProduct('create')}>
+                                    Create Category
+                                </Link>
+                            </Menu.Item>
+                            <Menu.Item key={AppURL.createOrUpdateProduct('update')} icon={<PieChartOutlined/>}>
+                                <Link to={AppURL.createOrUpdateProduct('update')}>
+                                    Update Category
+                                </Link>
+                            </Menu.Item>
+                        </SubMenu>
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">

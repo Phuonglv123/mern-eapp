@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Table, Radio, Divider, Card} from 'antd';
+import {Card, PageHeader, Table} from 'antd';
 
 const columns = [
     {
@@ -57,7 +57,12 @@ const ManagerCategory = () => {
     const [selectionType, setSelectionType] = useState('checkbox');
     return (
         <Card title={
-
+            <PageHeader
+                className="site-page-header"
+                onBack={() => null}
+                title="Title"
+                subTitle="This is a subtitle"
+            />
         } bordered={false} style={{width: '100%'}}>
             <Table
                 rowSelection={{

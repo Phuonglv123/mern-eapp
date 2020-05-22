@@ -8,6 +8,8 @@ import LoginScene from "../../scenes/LoginScene/LoginScene";
 import ManagerCategory from "../../scenes/ManagerCategoryScene/ManagerCategory";
 import ManagerProduct from "../../scenes/ManagerProductScene/ManagerProduct";
 import LayoutAdmin from "../layout/LayoutAdmin";
+import CreateOrUpdateCategoryScene from "../../scenes/ManagerCategoryScene/CreateOrUpdateCategoryScene";
+import CreateOrUpdateProductScene from "../../scenes/ManagerProductScene/CreateOrUpdateProductScene";
 
 
 const routes = [
@@ -25,13 +27,28 @@ const routes = [
 const privateRoute = [
     {
         path: AppURL.dashboard(),
+        exact: true,
         component: DashboardScene
     }, {
         path: AppURL.category(),
+        exact: true,
         component: ManagerCategory
     }, {
         path: AppURL.product(),
+        exact: true,
         component: ManagerProduct
+    }, {
+        path: AppURL.createOrUpdateCategory('create'),
+        component: CreateOrUpdateCategoryScene
+    }, {
+        path: AppURL.createOrUpdateCategory('update'),
+        component: CreateOrUpdateCategoryScene
+    }, {
+        path: AppURL.createOrUpdateProduct('create'),
+        component: CreateOrUpdateProductScene
+    }, {
+        path: AppURL.createOrUpdateProduct('update'),
+        component: CreateOrUpdateProductScene
     }
 ];
 

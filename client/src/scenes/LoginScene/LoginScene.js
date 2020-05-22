@@ -16,7 +16,7 @@ class LoginScene extends Component {
         if (res.errors) {
             console.log(res.errors)
         } else {
-            Auth.authenticate(res.payload, () => {
+            Auth.authenticate(res, () => {
                 console.log('next')
             })
         }

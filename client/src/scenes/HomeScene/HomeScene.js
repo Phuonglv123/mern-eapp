@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import LayoutUser from "../../components/layout/LayoutUser";
 
 class HomeScene extends Component {
     render() {
         return (
-            <div>
+            <LayoutUser>
                 HomeScene
-            </div>
+            </LayoutUser>
         );
     }
 }

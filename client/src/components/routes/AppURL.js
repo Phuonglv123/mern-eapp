@@ -18,6 +18,14 @@ class AppURL {
     category() {
         return '/category'
     }
+
+    createOrUpdateCategory(action) {
+        return `/category/${action}`
+    }
+
+    createOrUpdateProduct(action) {
+        return `/product/${action}`
+    }
 }
 
 export default new AppURL();
