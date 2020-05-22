@@ -7,8 +7,16 @@ class AppURL {
         return '/'
     }
 
-    dashboard(){
+    dashboard() {
         return '/dashboard'
+    }
+
+    product() {
+        return '/product'
+    }
+
+    category() {
+        return '/category'
     }
 }
 
